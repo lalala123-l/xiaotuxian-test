@@ -6,6 +6,4 @@ export type BannerItem = {
   id: string
   /** 图片链接 */
   imgUrl: string
-  /** 跳转类型 */
-  type: number
 }

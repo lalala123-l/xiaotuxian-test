@@ -12,15 +12,16 @@ import Swiper from './components/Swiper.vue'
 import type { BannerItem } from '@/types/home'
 import { getHomeBannerAPI } from '@/api/home'
 import { onLoad } from '@dcloudio/uni-app'
+import bannerMock from '@/mock/banner.json'
 
 // 获取轮播图数据
 const bannerList = ref<BannerItem[]>([])
-const getHomeBannerData = async () => {
-  const res = await getHomeBannerAPI()
-  bannerList.value = res.result
-}
+// const getHomeBannerData = async () => {
+//   const res = await getHomeBannerAPI()
+//   bannerList.value = res.result
+// }
 onLoad(() => {
-  getHomeBannerData()
+  bannerList.value = bannerMock.data
 })
 </script>
 <style lang="scss">

@@ -1,6 +1,12 @@
 <template>
   <view class="carousel">
-    <swiper :circular="true" :autoplay="false" :interval="3000" @change="onChange">
+    <swiper
+      :circular="true"
+      :autoplay="false"
+      :interval="3000"
+      :current="activeIndex"
+      @change="onChange"
+    >
       <swiper-item v-for="item in list" :key="item.id">
         <navigator url="/pages/index/index" hover-class="none" class="navigator">
           <image mode="aspectFill" class="image" :src="item.imgUrl"></image>
@@ -14,6 +20,7 @@
         :key="item.id"
         class="dot"
         :class="{ active: index === activeIndex }"
+        @click="handleDotClick(index)"
       ></text>
     </view>
   </view>
@@ -28,6 +35,12 @@ const activeIndex = ref(0)
 const onChange: UniHelper.SwiperOnChange = (ev) => {
   activeIndex.value = ev.detail.current
 }
+
+const handleDotClick = (idx: number) => {
+  console.log('111')
+  activeIndex.value = idx
+}
+
 // 定义 props 接收
 defineProps<{
   list: BannerItem[]
@@ -56,6 +69,7 @@ defineProps<{
       margin: 0 8rpx;
       border-radius: 6rpx;
       background-color: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
     }
 
     .active {
