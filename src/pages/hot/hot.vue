@@ -85,17 +85,12 @@ const getHotRecommendData = async () => {
 // 滚动触底
 const onScrolltolower = async () => {
   console.log('触底事件触发')
-  // 获取当前选项
   const currsubTypes = subTypes.value[activeIndex.value]
   if (!currsubTypes) return
-  // 分页条件
   if (currsubTypes.goodsItems.page < currsubTypes.goodsItems.pages) {
-    // 当前页码累加
     currsubTypes.goodsItems.page++
   } else {
-    // 标记已结束
     currsubTypes.finish = true
-    // 退出并轻提示
     return uni.showToast({ icon: 'none', title: '没有更多数据了~' })
   }
 
@@ -105,18 +100,14 @@ const onScrolltolower = async () => {
     page: currsubTypes.goodsItems.page,
     pageSize: currsubTypes.goodsItems.pageSize,
   })
-  // 新的列表选项
   const newsubTypes = res.result.subTypes[activeIndex.value]
   // 数组追加
   currsubTypes.goodsItems.items.push(...newsubTypes.goodsItems.items)
 }
 
 onLoad((options: any) => {
-  // 先设置 currentPage，再调用接口
   currentPage.value = urlMap.find((e) => options.type === e.type) || urlMap[0]
-  //动态设置标题
   uni.setNavigationBarTitle({ title: currentPage.value.title })
-  // 然后获取数据
   getHotRecommendData()
 })
 </script>
@@ -150,7 +141,6 @@ page {
 
 .scroll-view {
   height: calc(100% - 100rpx);
-  /* 关键：配合 flex: 1 使用，确保高度正确计算 */
 }
 
 .tabs {
