@@ -1,0 +1,72 @@
+{
+  "code":1,
+  "msg": "商品推荐数据加载成功",
+  "result": [
+    {
+      "alt": "舒适床品套装，限时折扣",
+      "id": "res001",
+      "pictures": [
+        "https://images.pexels.com/photos/248797/pexels-photo-248797.jpeg",
+        "https://images.pexels.com/photos/733857/pexels-photo-733857.jpeg"
+      ],
+      "target": "/pages/goods/detail?goodsId=1001",
+      "title": "特惠推荐",
+      "type": "discount"
+    },
+    {
+      "alt": "新鲜水果组合，销量TOP1",
+      "id": "res002",
+      "pictures": [
+        "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",
+        "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg"
+      ],
+      "target": "/pages/goods/detail?goodsId=1002",
+      "title": "爆品推荐",
+      "type": "hot"
+    },
+    {
+      "alt": "床品四件套，居家必备",
+      "id": "res003",
+      "pictures": [
+        "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg",
+        "https://images.pexels.com/photos/248797/pexels-photo-248797.jpeg"
+      ],
+      "target": "/pages/goods/detail?goodsId=1003",
+      "title": "一站买全",
+      "type": "allInOne"
+    },
+    {
+      "alt": "新鲜橙子，当季优选",
+      "id": "res004",
+      "pictures": [
+        "https://images.unsplash.com/photo-1542281286-9e0a16bb7366",
+        "https://images.pexels.com/photos/248797/pexels-photo-248797.jpeg"
+      ],
+      "target": "/pages/goods/detail?goodsId=1004",
+      "title": "省心生活",
+      "type": "daily"
+    },
+    {
+      "alt": "领券中心：卫浴用品套装，领券立减",
+      "id": "res005",
+      "pictures": [
+        "https://images.pexels.com/photos/36717/amazing-animal-beautiful-beautifull.jpg",
+        "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg"
+      ],
+      "target": "/pages/goods/detail?goodsId=1005",
+      "title": "领券中心",
+      "type": "coupon"
+    },
+    {
+      "alt": "新鲜水果，售后无忧",
+      "id": "res006",
+      "pictures": [
+        "https://images.pexels.com/photos/733857/pexels-photo-733857.jpeg",
+        "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg"
+      ],
+      "target": "/pages/goods/detail?goodsId=1006",
+      "title": "品质服务",
+      "type": "service"
+    }
+  ]
+}
