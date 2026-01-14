@@ -1,7 +1,7 @@
 <template>
   <view class="Cp-container">
     <view class="classify-item" v-for="item in props.list" :key="item.id">
-      <img :src="item.icon" alt="" />
+      <image class="icon" :src="item.icon" alt="" />
       <text>{{ item.name }}</text>
     </view>
   </view>
@@ -17,21 +17,21 @@ const props = defineProps<{
 </script>
 <style scoped lang="scss">
 .Cp-container {
-  margin: 20px;
+  margin: 55rpx 55rpx 0;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 30px;
+  gap: 30rpx;
 
   .classify-item {
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    img {
+    .icon {
       display: inline-block;
-      width: 50px;
-      height: 50px;
+      width: 100rpx;
+      height: 100rpx;
     }
   }
 }

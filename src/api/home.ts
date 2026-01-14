@@ -1,4 +1,5 @@
-import type { BannerItem, ClassifyItem } from '@/types/home'
+import type { PageResult } from '@/types/global'
+import type { BannerItem, ClassifyItem, GuessItem, HotItem } from '@/types/home'
 import { http } from '@/utils/http'
 
 //首页广告区
@@ -23,5 +24,13 @@ export const getHomeHotAPI = () => {
   return http<HotItem[]>({
     method: 'GET',
     url: '/home/hot/mutli',
+  })
+}
+
+export const getHomeGoodsGuessLikeAPI = (data?: PageParams) => {
+  return http<PageResult<GuessItem>>({
+    method: 'GET',
+    url: '/home/goods/guessLike',
+    data,
   })
 }
