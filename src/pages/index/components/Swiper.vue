@@ -55,6 +55,11 @@ defineProps<{
   transform: translateY(0);
   background-color: #efefef;
 
+  swiper {
+    height: 280rpx;
+    width: 100%;
+  }
+
   .indicator {
     position: absolute;
     left: 0;
