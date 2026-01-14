@@ -11,9 +11,12 @@
       @scrolltolower="onScrolltolower"
     >
       <Swiper :list="bannerList"></Swiper>
-      <CatergoryPanel :list="categoryList"></CatergoryPanel>
-      <HotPanel :list="hotList" />
-      <XtxGuess ref="guessRef" />
+      <PanelSkeleton v-if="isLoading" />
+      <template v-else>
+        <CatergoryPanel :list="categoryList"></CatergoryPanel>
+        <HotPanel :list="hotList" />
+        <XtxGuess ref="guessRef" />
+      </template>
     </scroll-view>
   </view>
 </template>
@@ -30,6 +33,7 @@ import CatergoryPanel from './components/CatergoryPanel.vue'
 import { getClassifListyAPI, getHomeHotAPI } from '@/api/home'
 import HotPanel from './components/HotPanel.vue'
 import XtxGuess from '@/components/XtxGuess.vue'
+import PanelSkeleton from './components/PanelSkeleton.vue'
 
 const guessRef = ref<InstanceType<typeof XtxGuess>>()
 // 获取轮播图数据
@@ -37,6 +41,7 @@ const bannerList = ref<BannerItem[]>([])
 const categoryList = ref<ClassifyItem[]>([])
 const hotList = ref<HotItem[]>([])
 const isTriggered = ref(false)
+const isLoading = ref(true)
 
 const getClassifLisfy = async () => {
   const res = await getClassifListyAPI()
@@ -81,22 +86,24 @@ const onScrolltolower = () => {
   guessRef.value?.getMore()
 }
 
-onLoad(() => {
+onLoad(async () => {
+  isLoading.value = true
   bannerList.value = bannerMock.data as []
-  getClassifLisfy()
   hotList.value = hotListMock.result
+  // 等待分类数据加载完成后再隐藏骨架屏
+  await getClassifLisfy()
+  isLoading.value = false
 })
 </script>
 <style lang="scss">
 .index {
   display: flex;
-  height: 100vh; // 确保 scroll-view 具备可滚动高度
+  height: 100vh;
   flex-direction: column;
   background: #fff;
 
   .page-scroll {
-    flex: 1;
-    height: calc(100vh - 100rpx);
+    height: calc(100vh - 32rpx);
   }
 }
 </style>
