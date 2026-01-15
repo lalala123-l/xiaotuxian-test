@@ -1,11 +1,38 @@
 <template>
   <view class="category" v-if="isFinish">
     <view class="search-box">
-      <cc-SearchBarHisView
+      <!-- <cc-SearchBarHisView
         searchPlaceHolder="请输入产品名称、关键字"
         @hisClick="selHisClick"
         @searchClick="goSearchClick"
-      ></cc-SearchBarHisView>
+      ></cc-SearchBarHisView> -->
+      <uni-search-bar
+        @confirm="handleSearchConfirm"
+        :focus="true"
+        v-model="searchValue"
+        @blur="handleBlur"
+        @focus="handleFocus"
+        cancel-button="none"
+      >
+      </uni-search-bar>
+      <button class="search-btn" hover-class="button-hover" @click="handleButtonClick">搜索</button>
+    </view>
+    <!-- 历史搜索记录列表（获取焦点时显示，失去焦点/搜索后可隐藏） -->
+    <view class="history-list" v-if="showHistory && searchHistoryStore.historyList.length > 0">
+      <view class="history-header">
+        <text>历史搜索</text>
+        <text class="clear-all" @click="clearAllHistory">清空全部</text>
+      </view>
+      <view
+        class="history-item"
+        v-for="(item, index) in searchHistoryStore.historyList"
+        :key="index"
+      >
+        <!-- 点击历史记录，回填到搜索框 -->
+        <text class="history-keyword" @click="handleHistoryClick(item)">{{ item }}</text>
+        <!-- 删除单条历史记录 -->
+        <text class="delete-item" @click="deleteSingleHistory(index)">×</text>
+      </view>
     </view>
     <!-- 分类 -->
     <view class="categories">
@@ -18,7 +45,7 @@
           :class="{ active: index === activeIndex }"
           @tap="activeIndex = index"
         >
-          <text class="name">
+          <text class="nam e">
             {{ item.name }}
           </text>
         </view>
@@ -62,23 +89,57 @@ import { getHomeBannerAPI } from '@/api/home'
 import type { CategoryTopItem } from '@/types/category'
 import type { BannerItem } from '@/types/home'
 import { onLoad } from '@dcloudio/uni-app'
-import { computed, defineAsyncComponent, ref } from 'vue'
-
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
+import { useHistoryStore } from '@/stores'
 const PageSkeleton = defineAsyncComponent(
   () => import('@/pages/category/components/PageSkeleton.vue'),
 )
 
-const selHisClick = (item: any) => {
-  console.log('选择的值 = ' + item)
-  uni.navigateTo({
-    url: '/pages/index/search?name=' + item,
-  })
+//输入框
+const searchValue = ref('') // 搜索框绑定的值
+const showHistory = ref<boolean>(true) // 是否显示历史记录（默认隐藏）
+
+//点击按钮触发搜索事件并且把记录存入历史记录中
+const handleButtonClick = () => {
+  searchHistoryStore.addHistory(searchValue.value)
 }
 
-const goSearchClick = (item: any) => {
-  uni.navigateTo({
-    url: '/pages/index/search?name=' + item,
-  })
+//清空全部记录
+const clearAllHistory = () => {
+  searchHistoryStore.clearAllHistory()
+  uni.removeStorageSync('searchHistory')
+}
+
+// 输入框获取焦点
+const handleFocus = () => {
+  showHistory.value = !showHistory.value
+}
+
+// 4. 搜索框失焦事件：延迟隐藏
+const handleBlur = () => {
+  setTimeout(() => {
+    showHistory.value = false
+  }, 300)
+}
+
+//点击历史记录回填到搜索框
+const handleHistoryClick = (item: string) => {
+  searchValue.value = item
+}
+
+//删除单条历史记录
+const deleteSingleHistory = (index: number) => {
+  searchHistoryStore.deleteHistory(index)
+  showHistory.value = true
+  console.log(showHistory.value)
+}
+
+const handleSearchConfirm = () => {
+  const keyword = searchValue.value
+  searchHistoryStore.addHistory(keyword)
+  showHistory.value = false
+  console.log('搜索关键词：', keyword)
+  // 跳转搜索结果页...
 }
 
 // 获取轮播图数据
@@ -96,6 +157,10 @@ const getCategoryTopData = async () => {
   categoryList.value = res.result
 }
 
+// 提取当前二级分类数据
+const subCategoryList = computed(() => {
+  return categoryList.value[activeIndex.value]?.children || []
+})
 // 是否数据加载完毕
 const isFinish = ref(false)
 // 页面加载
@@ -104,9 +169,13 @@ onLoad(async () => {
   isFinish.value = true
 })
 
-// 提取当前二级分类数据
-const subCategoryList = computed(() => {
-  return categoryList.value[activeIndex.value]?.children || []
+const searchHistoryStore = useHistoryStore()
+const loadHistoryFromStorage = () => {
+  const historyStr = uni.getStorageSync('searchHistory') || '[]'
+  historyList.value = JSON.parse(historyStr)
+}
+onMounted(() => {
+  loadHistoryFromStorage()
 })
 </script>
 
@@ -117,21 +186,95 @@ page {
   overflow: hidden;
 }
 
-.search {
-  padding: 20rpx 30rpx;
-  background-color: #fff;
+.search-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-  .input {
+  .search-btn {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    height: 64rpx;
-    padding-left: 26rpx;
-    color: #8b8b8b;
-    font-size: 28rpx;
-    border-radius: 32rpx;
-    background-color: #f3f4f4;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    width: 150rpx;
+    height: 60rpx;
   }
+}
+
+/* 历史记录列表样式 */
+.history-list {
+  position: absolute;
+  top: 80rpx;
+  padding: 20rpx;
+  width: 100%;
+  background-color: #f8f9fa;
+  border-radius: 16rpx;
+  z-index: 999;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  color: #666;
+  font-size: 28rpx;
+}
+
+.clear-all {
+  color: #007aff;
+}
+
+/* 历史记录项样式 */
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #eee;
+  font-size: 30rpx;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-keyword {
+  color: #333;
+}
+
+.delete-item {
+  color: #999;
+  font-size: 36rpx;
+  margin-left: 20rpx;
+}
+
+.uni-searchbar {
+  width: 100%;
+}
+
+.search-result {
+  padding-top: 10px;
+  padding-bottom: 20px;
+  text-align: center;
+}
+
+.search-result-text {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+
+.example-body {
+  /* #ifndef APP-NVUE */
+  display: block;
+  /* #endif */
+  padding: 0px;
+}
+
+.uni-mt-10 {
+  margin-top: 10px;
 }
 
 .icon-search {
