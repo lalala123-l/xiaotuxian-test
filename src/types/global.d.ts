@@ -33,7 +33,8 @@ export type GoodsItem = {
   /** 商品已下单数量 */
   orderNum: number
   /** 商品图片 */
-  picture: string
+  mainPictures: []
   /** 商品价格 */
   price: number
+  details: {}
 }
