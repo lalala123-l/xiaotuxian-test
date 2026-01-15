@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import CustomNavbar from './components/CustomNavbar.vue'
-import Swiper from './components/Swiper.vue'
+import Swiper from '@/components/Swiper.vue'
 
 import type { BannerItem, ClassifyItem, HotItem } from '@/types/home'
 import { onLoad } from '@dcloudio/uni-app'
