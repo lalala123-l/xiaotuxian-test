@@ -19,7 +19,7 @@
 
         <navigator
           class="settings"
-          url="/pages/settingpage/settingpage"
+          url="/pagesMember/settingpage/settingpage"
           open-type="navigate"
           hover-class="navigator-hover"
         >

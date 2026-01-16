@@ -54,12 +54,6 @@
       "style": {
         "navigationBarTitleText": "商品详情"
       }
-    },
-    {
-      "path": "pages/settingpage/settingpage",
-      "style": {
-        "navigationBarTitleText": "设置"
-      }
     }
   ],
   "globalStyle": {
@@ -103,14 +97,14 @@
   },
   "subPackages": [
     {
-      "root": "/pageMember",
+      "root": "pagesMember",
       "pages": [
         {
-          "path": "settings/settings",
+          "path": "settingpage/settingpage",
           "style": {
             "navigationBarTitleText": "设置"
           }
-        },
+        }
       ]
     }
   ],
