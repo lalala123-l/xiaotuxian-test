@@ -122,10 +122,10 @@ const onSubmit = async () => {
 <template>
   <view class="viewport">
     <!-- 导航栏 -->
-    <view class="navbar" :style="{ paddingTop: safeAreaInsets?.top + 'px' }">
+    <!-- <view class="navbar" :style="{ paddingTop: safeAreaInsets?.top + 'px' }">
       <navigator open-type="navigateBack" class="back icon-left" hover-class="none"></navigator>
       <view class="title">个人信息</view>
-    </view>
+    </view> -->
     <!-- 头像 -->
     <view class="avatar">
       <view @tap="onAvatarChange" class="avatar-content">
@@ -210,6 +210,7 @@ page {
   background-image: url(https://pcapi-xiaotuxian-front-devtest.itheima.net/miniapp/images/order_bg.png);
   background-size: auto 420rpx;
   background-repeat: no-repeat;
+  background-color: #f5f5f5;
 }
 
 // 导航栏
