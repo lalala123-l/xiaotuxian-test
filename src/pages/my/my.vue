@@ -4,20 +4,17 @@
     <view class="header-bg">
       <!-- 用户信息 -->
       <view style="display: flex; justify-content: space-between">
-        <view class="user-info" v-if="memberStore.profile">
-          <image class="avatar" src="../../static/images/car.png" mode="aspectFill" />
+        <view class="user-info" @click="handleAvatarClick">
+          <image class="avatar" src="/static/images/car.png" mode="aspectFill" />
           <view class="user-text">
-            <text class="user-nickname">{{ memberStore.profile.nickname }}</text>
-          </view>
-        </view>
-        <view class="user-info" v-else>
-          <image class="avatar" src="../../static/images/car.png" mode="aspectFill" />
-          <view class="user-text">
-            <text class="user-nickname">未登录</text>
+            <text class="user-nickname">
+              {{ memberStore?.profile?.nickname || '未登录' }}
+            </text>
           </view>
         </view>
 
         <navigator
+          v-if="memberStore.profile"
           class="settings"
           url="/pagesMember/settingpage/settingpage"
           open-type="navigate"
@@ -102,8 +99,27 @@
 
 <script setup lang="ts">
 import { useMemberStore } from '@/stores'
-
+import { onLoad } from '@dcloudio/uni-app'
 const memberStore = useMemberStore()
+const handleAvatarClick = () => {
+  if (memberStore?.profile) {
+    //个人中心登录页面点击个人中心需要有个人中心的信息展示
+    uni.navigateTo({
+      url: '/pagesMember/profile/profile',
+    })
+  } else {
+    // 未登录：执行跳转登录逻辑
+    handleLogin()
+  }
+}
+const handleLogin = () => {
+  uni.navigateTo({ url: '/pages/login/login' })
+}
+onLoad(() => {
+  // 打印状态，验证是否能正常获取
+  console.log('memberStore 整体状态：', memberStore)
+  console.log('memberStore.profile 状态：', memberStore?.profile)
+})
 </script>
 
 <style lang="scss" scoped>
