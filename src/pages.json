@@ -54,7 +54,7 @@
       "style": {
         "navigationBarTitleText": "商品详情"
       }
-    }
+    },
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
@@ -103,6 +103,13 @@
           "path": "settingpage/settingpage",
           "style": {
             "navigationBarTitleText": "设置"
+          }
+        },
+        {
+          "path": "profile/profile",
+          "style": {
+            "navigationBarBackgroundColor": "#01B7A9",
+            "navigationBarTitleText": "个人中心"
           }
         }
       ]
