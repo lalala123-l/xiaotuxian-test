@@ -3,19 +3,29 @@
     <!-- 顶部背景 & 导航栏 -->
     <view class="header-bg">
       <!-- 用户信息 -->
-      <view class="user-info" v-if="memberStore.profile">
-        <image class="avatar" src="../../static/images/car.png" mode="aspectFill" />
-        <view class="user-text">
-          <text class="user-nickname">{{ memberStore.profile }}</text>
+      <view style="display: flex; justify-content: space-between">
+        <view class="user-info" v-if="memberStore.profile">
+          <image class="avatar" src="../../static/images/car.png" mode="aspectFill" />
+          <view class="user-text">
+            <text class="user-nickname">{{ memberStore.profile.nickname }}</text>
+          </view>
         </view>
-      </view>
-      <view class="user-info" v-else>
-        <image class="avatar" src="../../static/images/car.png" mode="aspectFill" />
-        <view class="user-text">
-          <text class="user-nickname">未登录</text>
+        <view class="user-info" v-else>
+          <image class="avatar" src="../../static/images/car.png" mode="aspectFill" />
+          <view class="user-text">
+            <text class="user-nickname">未登录</text>
+          </view>
         </view>
-      </view>
 
+        <navigator
+          class="settings"
+          url="/pages/settingpage/settingpage"
+          open-type="navigate"
+          hover-class="navigator-hover"
+        >
+          设置
+        </navigator>
+      </view>
       <!-- 会员卡条 -->
       <view class="member-card">
         <text class="member-title">通用会员卡</text>
@@ -158,6 +168,13 @@ const memberStore = useMemberStore()
 .user-info {
   margin-top: 100rpx;
   display: flex;
+  align-items: center;
+}
+
+.settings {
+  margin-top: 100rpx;
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 
