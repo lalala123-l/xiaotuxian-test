@@ -34,10 +34,15 @@ const loginSuccess = (profile: LoginResult) => {
   // 成功提示
   uni.showToast({ icon: 'success', title: '登录成功' })
   setTimeout(() => {
-    // 页面跳转
-    //小程序页面分为普通页面和开发页面
-    // uni.switchTab({ url: '/pages/my/my' })
-    uni.navigateBack()
+    const pages = getCurrentPages()
+    if (pages.length > 1) {
+      uni.navigateBack()
+    } else {
+      // 方案B：跳转至 tabBar 页面（仅适用于 pages.json 中配置的 tabBar 页面）
+      uni.switchTab({
+        url: '/pages/my/my',
+      })
+    }
   }, 500)
 }
 
