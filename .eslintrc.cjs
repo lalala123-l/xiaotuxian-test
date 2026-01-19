@@ -1,5 +1,5 @@
 /* eslint-env node */
-require('@rushstack/eslint-patch/modern-module-resolution')
+require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
   root: true,
@@ -9,6 +9,11 @@ module.exports = {
     '@vue/eslint-config-typescript',
     '@vue/eslint-config-prettier',
   ],
+  env: {
+    browser: true, // 浏览器环境（Vue 项目必备）
+    node: true,    // 核心：启用 Node.js 环境，识别 exports、require 等内置对象
+    es2021: true   // 支持 ES2021 语法特性
+  },
   // 小程序全局变量
   globals: {
     uni: true,
@@ -37,9 +42,10 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
+    semi: 'off',
     'vue/multi-word-component-names': ['off'],
     'vue/no-setup-props-destructure': ['off'],
     'vue/no-deprecated-html-element-is': ['off'],
     '@typescript-eslint/no-unused-vars': ['off'],
   },
-}
+};

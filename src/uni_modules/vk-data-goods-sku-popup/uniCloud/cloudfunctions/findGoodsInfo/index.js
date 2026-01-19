@@ -1,5 +1,5 @@
 'use strict'
-exports.main = async (event, context) => {
+exports.main = async (event) => {
   //event为客户端上传的参数
   let { goods_id } = event
   /**
