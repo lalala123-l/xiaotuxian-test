@@ -75,15 +75,17 @@
         <text class="total-label">合计:</text>
         <text class="total-price">¥{{ totalPrice }}</text>
       </view>
+      <button class="del-btn" @click="handleDelete">删除</button>
       <button class="settle-btn" @click="handleSettle">结算</button>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { getMemberCartAPI } from '@/api/cart'
+import { deleteMemberCartAPI, getMemberCartAPI } from '@/api/cart'
+import { useMemberStore } from '@/stores'
 import type { CartItem } from '@/types/cart'
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad, onShow } from '@dcloudio/uni-app'
 import { ref, computed, watch } from 'vue'
 
 const isGlobalEditMode = ref<boolean>(false)
@@ -145,6 +147,27 @@ const handleGlobalEdit = () => {
   })
 }
 
+const handleDelete = async () => {
+  uni.showModal({
+    title: '提示',
+    content: '确定清空购物车吗？',
+    success: async (res) => {
+      if (res.confirm) {
+        selectedAll.value = false
+        isGlobalEditMode.value = false
+        //调用清空购物车api
+        const ids = cartList.value.filter((v) => v.selected === true).map((v) => v.id)
+        try {
+          await deleteMemberCartAPI({ ids })
+          getCartList()
+        } catch (e) {
+          console.log(e)
+        }
+      }
+    },
+  })
+}
+
 // 清空购物车
 const handleClear = () => {
   uni.showModal({
@@ -152,13 +175,23 @@ const handleClear = () => {
     content: '确定清空购物车吗？',
     success: (res) => {
       if (res.confirm) {
-        cartList.value = []
         selectedAll.value = false
         isGlobalEditMode.value = false
-        uni.showToast({ title: '已清空购物车', icon: 'success' })
+        //调用清空购物车api
+        clearAllCart()
       }
     },
   })
+}
+//清空购物车请求
+const clearAllCart = async () => {
+  const ids = cartList.value.map((v) => v.id)
+  try {
+    await deleteMemberCartAPI({ ids })
+    getCartList()
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 // 减少单个商品数量
@@ -217,9 +250,12 @@ watch(
   { deep: true },
 )
 
+const memberStore = useMemberStore()
 // 页面加载获取购物车数据
-onLoad(() => {
-  getCartList()
+onShow(() => {
+  if (memberStore.profile) {
+    getCartList()
+  }
 })
 </script>
 
@@ -428,6 +464,23 @@ onLoad(() => {
         font-size: 32rpx;
         font-weight: 600;
       }
+    }
+
+    .del-btn {
+      height: 60rpx;
+      line-height: 60rpx;
+      padding: none;
+      background: #fff;
+      color: #7c7777;
+    }
+
+    uni-button {
+      border: none;
+      margin: 0;
+    }
+
+    uni-button:after {
+      border: none;
     }
 
     .settle-btn {
