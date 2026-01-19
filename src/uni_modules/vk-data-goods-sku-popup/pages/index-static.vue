@@ -1,63 +1,72 @@
 <!-- 静态数据演示版本 适合任何后端 -->
 <template>
-	<view class="app">
-		<button @click="openSkuPopup(0)">打开SKU组件</button>
-		<view class="tips">会记住上次打开的状态</view>
-		<button @click="openSkuPopup(1)">打开且选中指定SKU</button>
-		<view class="tips">每次打开都是选中指定的SKU</view>
-		
-		<view class="form-item" v-for="(item1,index1) in selectData" :key="index1">
-			<view class="form-item-label">{{ item1.name }}</view>
-			<template v-if="item1.type === 'radio'">
-				<radio-group name="radio" @change="e => skuPopupData[item1.key] = e.detail.value">
-					<view class="radio" v-for="(item2,index2) in item1.data" :key="index2">
-						<label>
-							<radio :value="item2.value" :checked="skuPopupData[item1.key] === item2.value" />
-							<text class="radio-text">{{ item2.text }}</text>
-						</label>
-					</view>
-				</radio-group>
-			</template>
-			<template v-if="item1.type === 'switch'">
-				<switch :checked="skuPopupData[item1.key]" @change="e => skuPopupData[item1.key] = e.detail.value" />
-			</template>
-			<template v-if="item1.type === 'number-box'">
-				<vk-data-input-number-box v-model="skuPopupData[item1.key]" :min="1" :max="10000000" :step="1" :positive-integer="true"></vk-data-input-number-box>
-			</template>
-			<template v-if="item1.type === 'text'">
-				<input class="input" v-model="skuPopupData[item1.key]" />
-			</template>
-		</view>
-		
-		<vk-data-goods-sku-popup 
-			ref="skuPopup" 
-			v-model="skuPopupData.show" 
-			border-radius="20"
-			:z-index="990"
-			:localdata="goodsInfo" 
-			:selected-init="true" 
-			:mode="skuPopupData.mode" 
-			:theme="skuPopupData.theme"
-			:show-close="skuPopupData.showClose"
-			:hide-stock="skuPopupData.hideStock"
-			:mask-close-able="skuPopupData.maskCloseAble"
-			:buy-now-text="skuPopupData.buyNowText"
-			:add-cart-text="skuPopupData.addCartText"
-			:no-stock-text="skuPopupData.noStockText"
-			:min-buy-num="skuPopupData.minBuyNum"
-			:max-buy-num="skuPopupData.maxBuyNum"
-			:step-buy-num="skuPopupData.stepBuyNum"
-			:step-strictly="skuPopupData.stepStrictly"
-			@open="onOpenSkuPopup"
-			@close="onCloseSkuPopup" 
-			@cart="addCart" 
-			@buy="buyNow"
-		></vk-data-goods-sku-popup>
-	</view>
+  <view class="app">
+    <button @click="openSkuPopup(0)">打开SKU组件</button>
+    <view class="tips">会记住上次打开的状态</view>
+    <button @click="openSkuPopup(1)">打开且选中指定SKU</button>
+    <view class="tips">每次打开都是选中指定的SKU</view>
+
+    <view class="form-item" v-for="(item1, index1) in selectData" :key="index1">
+      <view class="form-item-label">{{ item1.name }}</view>
+      <template v-if="item1.type === 'radio'">
+        <radio-group name="radio" @change="(e) => (skuPopupData[item1.key] = e.detail.value)">
+          <view class="radio" v-for="(item2, index2) in item1.data" :key="index2">
+            <label>
+              <radio :value="item2.value" :checked="skuPopupData[item1.key] === item2.value" />
+              <text class="radio-text">{{ item2.text }}</text>
+            </label>
+          </view>
+        </radio-group>
+      </template>
+      <template v-if="item1.type === 'switch'">
+        <switch
+          :checked="skuPopupData[item1.key]"
+          @change="(e) => (skuPopupData[item1.key] = e.detail.value)"
+        />
+      </template>
+      <template v-if="item1.type === 'number-box'">
+        <vk-data-input-number-box
+          v-model="skuPopupData[item1.key]"
+          :min="1"
+          :max="10000000"
+          :step="1"
+          :positive-integer="true"
+        ></vk-data-input-number-box>
+      </template>
+      <template v-if="item1.type === 'text'">
+        <input class="input" v-model="skuPopupData[item1.key]" />
+      </template>
+    </view>
+
+    <vk-data-goods-sku-popup
+      ref="skuPopup"
+      v-model="skuPopupData.show"
+      border-radius="20"
+      :z-index="990"
+      :localdata="goodsInfo"
+      :selected-init="true"
+      :mode="skuPopupData.mode"
+      :theme="skuPopupData.theme"
+      :show-close="skuPopupData.showClose"
+      :hide-stock="skuPopupData.hideStock"
+      :mask-close-able="skuPopupData.maskCloseAble"
+      :buy-now-text="skuPopupData.buyNowText"
+      :add-cart-text="skuPopupData.addCartText"
+      :no-stock-text="skuPopupData.noStockText"
+      :min-buy-num="skuPopupData.minBuyNum"
+      :max-buy-num="skuPopupData.maxBuyNum"
+      :step-buy-num="skuPopupData.stepBuyNum"
+      :step-strictly="skuPopupData.stepStrictly"
+      @open="onOpenSkuPopup"
+      @close="onCloseSkuPopup"
+      @cart="addCart"
+      @buy="buyNow"
+    ></vk-data-goods-sku-popup>
+  </view>
 </template>
 
 <script>
-	/* eslint-disable */
+/* eslint-disable */
 	// 静态商品数据列表
 	const goodsList = [
 		{

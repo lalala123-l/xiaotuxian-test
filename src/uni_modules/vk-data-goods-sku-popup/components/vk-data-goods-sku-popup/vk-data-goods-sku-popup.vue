@@ -6,132 +6,164 @@
 如有问题，可加Q群：22466457 反馈
  -->
 <template>
-	<!-- #ifndef MP-TOUTIAO -->
-	<view class="vk-data-goods-sku-popup" :style="{ zIndex: zIndex }" catchtouchmove="true" :class="valueCom && complete ? 'show' : 'none'" @touchmove.stop.prevent="moveHandle" @click.stop="stop">
-	<!-- #endif -->
-	<!-- #ifdef MP-TOUTIAO -->
-	<view class="vk-data-goods-sku-popup" :style="{ zIndex: zIndex }" :class="valueCom && complete ? 'show' : 'none'" @touchmove.stop.prevent="moveHandle" @click.stop="stop">
-	<!-- #endif -->
-		<!-- 页面内容开始 -->
-		<view class="mask" @click="close('mask')"></view>
-		<view class="layer attr-content" :class="{'safe-area-inset-bottom':safeAreaInsetBottom }" :style="{ borderRadius: borderRadius + 'rpx ' + borderRadius + 'rpx 0 0' }">
-			<view class="specification-wrapper">
-				<scroll-view class="specification-wrapper-content" scroll-y="true">
-					<view class="specification-header">
-						<view class="specification-left">
-							<image
-								class="product-img"
-								:src="selectShop.image ? selectShop.image : goodsInfo[goodsThumbName]"
-								:style="{ backgroundColor: goodsThumbBackgroundColor }"
-								mode="aspectFill"
-								@click="previewImage"
-							></image>
-						</view>
-						<view class="specification-right">
-							<view class="price-content" :style="{ color: themeColorFn('priceColor') }">
-								<text class="sign">¥</text>
-								<text class="price" :class="priceCom.length > 16 ? 'price2' : ''">{{ priceCom }}</text>
-							</view>
-							<view class="inventory" v-if="!hideStock">{{ stockText }}：{{ stockCom }}</view>
-							<view class="inventory" v-else></view>
-							<view class="choose" v-show="isManyCom">已选：{{ selectArr.join(' ') }}</view>
-						</view>
-					</view>
+  <!-- #ifndef MP-TOUTIAO -->
+  <view
+    class="vk-data-goods-sku-popup"
+    :style="{ zIndex: zIndex }"
+    catchtouchmove="true"
+    :class="valueCom && complete ? 'show' : 'none'"
+    @touchmove.stop.prevent="moveHandle"
+    @click.stop="stop"
+  >
+    <!-- #endif -->
+    <!-- #ifdef MP-TOUTIAO -->
+    <view
+      class="vk-data-goods-sku-popup"
+      :style="{ zIndex: zIndex }"
+      :class="valueCom && complete ? 'show' : 'none'"
+      @touchmove.stop.prevent="moveHandle"
+      @click.stop="stop"
+    >
+      <!-- #endif -->
+      <!-- 页面内容开始 -->
+      <view class="mask" @click="close('mask')"></view>
+      <view
+        class="layer attr-content"
+        :class="{ 'safe-area-inset-bottom': safeAreaInsetBottom }"
+        :style="{ borderRadius: borderRadius + 'rpx ' + borderRadius + 'rpx 0 0' }"
+      >
+        <view class="specification-wrapper">
+          <scroll-view class="specification-wrapper-content" scroll-y="true">
+            <view class="specification-header">
+              <view class="specification-left">
+                <image
+                  class="product-img"
+                  :src="selectShop.image ? selectShop.image : goodsInfo[goodsThumbName]"
+                  :style="{ backgroundColor: goodsThumbBackgroundColor }"
+                  mode="aspectFill"
+                  @click="previewImage"
+                ></image>
+              </view>
+              <view class="specification-right">
+                <view class="price-content" :style="{ color: themeColorFn('priceColor') }">
+                  <text class="sign">¥</text>
+                  <text class="price" :class="priceCom.length > 16 ? 'price2' : ''">{{
+                    priceCom
+                  }}</text>
+                </view>
+                <view class="inventory" v-if="!hideStock">{{ stockText }}：{{ stockCom }}</view>
+                <view class="inventory" v-else></view>
+                <view class="choose" v-show="isManyCom">已选：{{ selectArr.join(' ') }}</view>
+              </view>
+            </view>
 
-					<view class="specification-content">
-						<view v-show="isManyCom" class="specification-item" v-for="(item, index1) in goodsInfo[specListName]" :key="index1">
-							<view class="item-title">{{ item.name }}</view>
-							<view class="item-wrapper">
-								<view
-									class="item-content"
-									v-for="(item_value, index2) in item.list"
-									:key="index2"
-									:class="[item_value.ishow ? '' : 'noactived', subIndex[index1] == index2 ? 'actived' : '']"
-									:style="[
-										item_value.ishow ? '' : themeColorFn('disableStyle'),
-										item_value.ishow ? themeColorFn('btnStyle') : '',
-										subIndex[index1] == index2 ? themeColorFn('activedStyle') : ''
-									]"
-									@click="skuClick(item_value, index1, index2)"
-								>
-									{{ item_value.name }}
-								</view>
-							</view>
-						</view>
-						<view class="number-box-view">
-							<view style="flex: 1;">数量</view>
-							<view style="flex: 4;text-align: right;">
-								<vk-data-input-number-box
-									v-model="selectNum"
-									:min="minBuyNum || 1"
-									:max="maxBuyNumCom"
-									:step="stepBuyNum || 1"
-									:step-strictly="stepStrictly"
-									:positive-integer="true"
-									@change="numChange"
-								></vk-data-input-number-box>
-							</view>
-						</view>
-					</view>
-				</scroll-view>
-				<view class="close" @click="close('close')" v-if="showClose != false"><image class="close-item" :src="closeImage"></image></view>
-			</view>
+            <view class="specification-content">
+              <view
+                v-show="isManyCom"
+                class="specification-item"
+                v-for="(item, index1) in goodsInfo[specListName]"
+                :key="index1"
+              >
+                <view class="item-title">{{ item.name }}</view>
+                <view class="item-wrapper">
+                  <view
+                    class="item-content"
+                    v-for="(item_value, index2) in item.list"
+                    :key="index2"
+                    :class="[
+                      item_value.ishow ? '' : 'noactived',
+                      subIndex[index1] == index2 ? 'actived' : '',
+                    ]"
+                    :style="[
+                      item_value.ishow ? '' : themeColorFn('disableStyle'),
+                      item_value.ishow ? themeColorFn('btnStyle') : '',
+                      subIndex[index1] == index2 ? themeColorFn('activedStyle') : '',
+                    ]"
+                    @click="skuClick(item_value, index1, index2)"
+                  >
+                    {{ item_value.name }}
+                  </view>
+                </view>
+              </view>
+              <view class="number-box-view">
+                <view style="flex: 1">数量</view>
+                <view style="flex: 4; text-align: right">
+                  <vk-data-input-number-box
+                    v-model="selectNum"
+                    :min="minBuyNum || 1"
+                    :max="maxBuyNumCom"
+                    :step="stepBuyNum || 1"
+                    :step-strictly="stepStrictly"
+                    :positive-integer="true"
+                    @change="numChange"
+                  ></vk-data-input-number-box>
+                </view>
+              </view>
+            </view>
+          </scroll-view>
+          <view class="close" @click="close('close')" v-if="showClose != false">
+            <image class="close-item" :src="closeImage"></image>
+          </view>
+        </view>
 
-			<view class="btn-wrapper" v-if="outFoStock || Number(mode) == 4">
-				<view class="sure" style="color:#ffffff;background-color:#cccccc">{{ noStockText }}</view>
-			</view>
-			<view class="btn-wrapper" v-else-if="Number(mode) == 1">
-				<view
-					class="sure add-cart"
-					style="border-radius:38rpx 0rpx 0rpx 38rpx;"
-					:style="{
-						color: themeColorFn('addCartColor'),
-						backgroundColor: themeColorFn('addCartBackgroundColor')
-					}"
-					@click="addCart"
-				>
-					{{ addCartText }}
-				</view>
+        <view class="btn-wrapper" v-if="outFoStock || Number(mode) == 4">
+          <view class="sure" style="color: #ffffff; background-color: #cccccc">{{
+            noStockText
+          }}</view>
+        </view>
+        <view class="btn-wrapper" v-else-if="Number(mode) == 1">
+          <view
+            class="sure add-cart"
+            style="border-radius: 38rpx 0rpx 0rpx 38rpx"
+            :style="{
+              color: themeColorFn('addCartColor'),
+              backgroundColor: themeColorFn('addCartBackgroundColor'),
+            }"
+            @click="addCart"
+          >
+            {{ addCartText }}
+          </view>
 
-				<view
-					class="sure"
-					style="border-radius:0rpx 38rpx 38rpx 0rpx;"
-					:style="{
-						color: themeColorFn('buyNowColor'),
-						backgroundColor: themeColorFn('buyNowBackgroundColor')
-					}"
-					@click="buyNow"
-				>
-					{{ buyNowText }}
-				</view>
-			</view>
-			<view class="btn-wrapper" v-else-if="Number(mode) == 2">
-				<view
-					class="sure add-cart"
-					:style="{
-						color: themeColorFn('addCartColor'),
-						backgroundColor: themeColorFn('addCartBackgroundColor')
-					}"
-					@click="addCart"
-				>
-					{{ addCartText }}
-				</view>
-			</view>
-			<view class="btn-wrapper" v-else-if="Number(mode) == 3">
-				<view
-					class="sure"
-					:style="{
-						color: themeColorFn('buyNowColor'),
-						backgroundColor: themeColorFn('buyNowBackgroundColor')
-					}"
-					@click="buyNow"
-				>
-					{{ buyNowText }}
-				</view>
-			</view>
-		</view>
-		<!-- 页面内容结束 -->
-	</view>
+          <view
+            class="sure"
+            style="border-radius: 0rpx 38rpx 38rpx 0rpx"
+            :style="{
+              color: themeColorFn('buyNowColor'),
+              backgroundColor: themeColorFn('buyNowBackgroundColor'),
+            }"
+            @click="buyNow"
+          >
+            {{ buyNowText }}
+          </view>
+        </view>
+        <view class="btn-wrapper" v-else-if="Number(mode) == 2">
+          <view
+            class="sure add-cart"
+            :style="{
+              color: themeColorFn('addCartColor'),
+              backgroundColor: themeColorFn('addCartBackgroundColor'),
+            }"
+            @click="addCart"
+          >
+            {{ addCartText }}
+          </view>
+        </view>
+        <view class="btn-wrapper" v-else-if="Number(mode) == 3">
+          <view
+            class="sure"
+            :style="{
+              color: themeColorFn('buyNowColor'),
+              backgroundColor: themeColorFn('buyNowBackgroundColor'),
+            }"
+            @click="buyNow"
+          >
+            {{ buyNowText }}
+          </view>
+        </view>
+      </view>
+      <!-- 页面内容结束 -->
+    </view>
+  </view>
 </template>
 
 <script>
@@ -140,7 +172,7 @@ var vk; // vk依赖
 var goodsCache = {}; // 本地商品缓存
 export default {
 	name: 'vk-data-goods-sku-popup',
-	emits: ['update:modelValue', 'input', 'update-goods', 'open', 'close', 'add-cart', 'buy-now','cart','buy','num-change'],
+	emits: ['update:modelValue', 'input', 'update-goods', 'open', 'close', 'add-cart', 'buy-now', 'cart', 'buy', 'num-change'],
 	props: {
 		// true 组件显示 false 组件隐藏
 		value: {
@@ -369,7 +401,7 @@ export default {
 			default: true
 		},
 		zIndex: {
-			type: [Number,String],
+			type: [Number, String],
 			default: 990
 		}
 	},
@@ -479,7 +511,7 @@ export default {
 			that.open();
 		}
 	},
-	mounted() {},
+	mounted() { },
 	methods: {
 		// 初始化
 		init(notAutoClick) {
@@ -590,14 +622,14 @@ export default {
 							useCache,
 							goodsId: that.goodsId,
 							goodsInfo,
-							close: function() {
-								setTimeout(function() {
+							close: function () {
+								setTimeout(function () {
 									that.close();
 								}, 500);
 							}
 						})
 						.catch(err => {
-							setTimeout(function() {
+							setTimeout(function () {
 								that.close();
 							}, 500);
 						});
@@ -605,7 +637,7 @@ export default {
 					let { message = '' } = err;
 					if (message.indexOf('.catch is not a function') > -1) {
 						that.toast('custom-action必须返回一个Promise', 'none');
-						setTimeout(function() {
+						setTimeout(function () {
 							that.close();
 						}, 500);
 						return false;
@@ -717,7 +749,7 @@ export default {
 					let choosed_copy = [...that.selectArr];
 					that.$set(choosed_copy, i, specList[i].list[j].name);
 					let choosed_copy2 = choosed_copy.filter(item => item !== '' && typeof item !== 'undefined');
-					if (Object.prototype.hasOwnProperty.call(that.shopItemInfo, that.getArrayToSting(choosed_copy2))){
+					if (Object.prototype.hasOwnProperty.call(that.shopItemInfo, that.getArrayToSting(choosed_copy2))) {
 						specList[i].list[j].ishow = true;
 					} else {
 						specList[i].list[j].ishow = false;
@@ -810,7 +842,7 @@ export default {
 		addCart() {
 			let that = this;
 			that.checkSelectComplete({
-				success: function(selectShop) {
+				success: function (selectShop) {
 					selectShop.buy_num = that.selectNum;
 					that.$emit('add-cart', selectShop);
 					that.$emit('cart', selectShop);
@@ -824,7 +856,7 @@ export default {
 		buyNow() {
 			let that = this;
 			that.checkSelectComplete({
-				success: function(selectShop) {
+				success: function (selectShop) {
 					selectShop.buy_num = that.selectNum;
 					that.$emit('buy-now', selectShop);
 					that.$emit('buy', selectShop);
@@ -955,7 +987,7 @@ export default {
 			goodsCache[goodsInfo[goodsIdName]] = goodsInfo;
 		},
 		// 用于阻止冒泡
-		stop() {},
+		stop() { },
 		// 图片预览
 		previewImage() {
 			let that = this;
@@ -986,7 +1018,7 @@ export default {
 			}
 			return maxStock;
 		},
-		numChange(e){
+		numChange(e) {
 			this.$emit("num-change", e.value);
 		}
 	},
@@ -1087,7 +1119,7 @@ export default {
 		},
 		defaultGoods: {
 			immediate: true,
-			handler: function(newVal, oldValue) {
+			handler: function (newVal, oldValue) {
 				let that = this;
 				let { goodsIdName } = that;
 				if (typeof newVal === 'object' && newVal && newVal[goodsIdName] && !goodsCache[newVal[goodsIdName]]) {
@@ -1109,6 +1141,7 @@ export default {
 	bottom: 0;
 	z-index: 990;
 	overflow: hidden;
+
 	&.show {
 		display: block;
 
@@ -1135,6 +1168,7 @@ export default {
 	&.none {
 		display: none;
 	}
+
 	.mask {
 		position: fixed;
 		top: 0;
@@ -1143,6 +1177,7 @@ export default {
 		z-index: 1;
 		background-color: rgba(0, 0, 0, 0.3);
 	}
+
 	.layer {
 		display: flex;
 		width: 100%;
@@ -1160,10 +1195,12 @@ export default {
 			width: 100%;
 			padding: 30rpx 25rpx;
 			box-sizing: border-box;
+
 			.specification-wrapper-content {
 				width: 100%;
 				max-height: 900rpx;
 				min-height: 300rpx;
+
 				&::-webkit-scrollbar {
 					/*隐藏滚轮*/
 					display: none;
@@ -1208,6 +1245,7 @@ export default {
 								margin-left: 4rpx;
 								font-size: 48rpx;
 							}
+
 							.price2 {
 								margin-left: 4rpx;
 								font-size: 36rpx;
@@ -1259,6 +1297,7 @@ export default {
 								margin-bottom: 16rpx;
 								border: 1px solid #f4f4f4;
 								box-sizing: border-box;
+
 								&.actived {
 									border-color: #fe560a;
 									color: #fe560a;
@@ -1272,12 +1311,14 @@ export default {
 							}
 						}
 					}
+
 					.number-box-view {
 						display: flex;
 						padding-top: 30rpx;
 					}
 				}
 			}
+
 			.close {
 				position: absolute;
 				top: 30rpx;
@@ -1286,12 +1327,14 @@ export default {
 				height: 50rpx;
 				text-align: center;
 				line-height: 50rpx;
+
 				.close-item {
 					width: 50rpx;
 					height: 50rpx;
 				}
 			}
 		}
+
 		.btn-wrapper {
 			display: flex;
 			width: 100%;
@@ -1301,6 +1344,7 @@ export default {
 			justify-content: space-between;
 			padding: 0 26rpx;
 			box-sizing: border-box;
+
 			.layer-btn {
 				width: 335rpx;
 				height: 76rpx;
@@ -1319,6 +1363,7 @@ export default {
 					background: #fe560a;
 				}
 			}
+
 			.sure {
 				width: 698rpx;
 				height: 68rpx;
@@ -1330,11 +1375,13 @@ export default {
 				font-size: 28rpx;
 				background: #fe560a;
 			}
+
 			.sure.add-cart {
 				background: #ff9402;
 			}
 		}
-		.btn-wrapper.safe-area-inset-bottom{
+
+		.btn-wrapper.safe-area-inset-bottom {
 			padding-bottom: 0;
 			padding-bottom: constant(safe-area-inset-bottom);
 			padding-bottom: env(safe-area-inset-bottom);
