@@ -85,22 +85,32 @@
           </view>
           <view class="setting-item">
             <view class="setting-icon setting-icon-blue"></view>
-            <text class="setting-text">收货地址</text>
+            <text class="setting-text">我的收藏</text>
           </view>
-          <view class="setting-item">
+          <view class="setting-item" @tap="handleOpenAddress">
             <view class="setting-icon setting-icon-green"></view>
-            <text class="setting-text">联系客服</text>
+            <text class="setting-text">收货地址</text>
           </view>
         </view>
       </view>
     </view>
+    <xtx-guess />
   </view>
 </template>
 
 <script setup lang="ts">
+import XtxGuess from '@/components/XtxGuess.vue'
 import { useMemberStore } from '@/stores'
 import { onLoad } from '@dcloudio/uni-app'
 const memberStore = useMemberStore()
+
+//跳转到收获地址
+const handleOpenAddress = () => {
+  uni.navigateTo({
+    url: '/pagesMember/address/address',
+  })
+}
+
 const handleAvatarClick = () => {
   if (memberStore?.profile) {
     //个人中心登录页面点击个人中心需要有个人中心的信息展示
@@ -238,7 +248,7 @@ onLoad(() => {
 
 .content {
   z-index: 888;
-  flex: 1;
+  // flex: 1;
   padding: 30rpx 32rpx 32rpx;
 }
 

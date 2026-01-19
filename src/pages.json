@@ -54,7 +54,7 @@
       "style": {
         "navigationBarTitleText": "商品详情"
       }
-    },
+    }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
@@ -110,6 +110,12 @@
           "style": {
             "navigationBarBackgroundColor": "#01B7A9",
             "navigationBarTitleText": "个人中心"
+          }
+        },
+        {
+          "path": "address/address",
+          "style": {
+            "navigationBarTitleText": "收货地址"
           }
         }
       ]
