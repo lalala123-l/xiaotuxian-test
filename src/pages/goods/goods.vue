@@ -222,7 +222,7 @@ const onTapImage = (url: string) => {
 
 const getGoodsByIdData = async (id: string) => {
   const res = await getGoodsByIdAPI(id)
-  goods.value = res.result
+  goods.value = res.result as GoodsItem
   // SKU组件所需格式
   localdata.value = {
     _id: res.result.id,

@@ -37,7 +37,7 @@
         <view class="card-header">
           <text class="card-title">我的订单</text>
           <view class="card-header-right">
-            <text class="card-link">全部</text>
+            <text class="card-link" @tap="handleAllClick">全部</text>
             <text class="icon-arrow">&gt;</text>
           </view>
         </view>
@@ -103,6 +103,12 @@ import XtxGuess from '@/components/XtxGuess.vue'
 import { useMemberStore } from '@/stores'
 import { onLoad } from '@dcloudio/uni-app'
 const memberStore = useMemberStore()
+
+const handleAllClick = () => {
+  uni.navigateTo({
+    url: '/pagesOrder/list/list',
+  })
+}
 
 //跳转到收获地址
 const handleOpenAddress = () => {

@@ -127,7 +127,6 @@ const deliveryList = ref([
 ])
 const activeIndex = ref()
 const onChangeDelivery: UniHelper.SelectorPickerOnChange = (ev) => {
-  s
   activeIndex.value = ev.detail.value
 }
 // 页面参数
