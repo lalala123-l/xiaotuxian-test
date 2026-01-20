@@ -23,47 +23,49 @@
       <!-- 商品列表 -->
       <view class="goods-list">
         <!-- 商品项：每个商品独立编辑状态 -->
-        <checkbox-group @change="handleCartCheckChange">
-          <view class="goods-item" v-for="(item, index) in cartList" :key="item.id || index">
-            <view class="goods-check">
-              <checkbox :checked="item.selected" :value="item.id" />
-            </view>
-            <view class="goods-img">
-              <image :src="item.picture" mode="aspectFit"></image>
-            </view>
-            <view class="goods-info">
-              <text class="goods-name">{{ item.name }}</text>
-              <text class="goods-spec">{{ item.attrsText }}</text>
-              <text class="goods-tag">同店每200减15 | 库存紧张</text>
-              <view class="price-group">
-                <text class="original-price">¥{{ item.nowOriginalPrice }}</text>
-                <text class="coupon-price">¥{{ item.nowPrice }} 券后价</text>
-              </view>
-            </view>
-            <!-- 编辑模式：当前商品显示 ± 按钮 -->
-            <view class="goods-count" v-if="item.isItemEdit" @click.stop>
-              <button
-                class="count-btn"
-                @click="minusCount(index)"
-                :disabled="cartList[index].count <= 1"
-              >
-                -
-              </button>
-              <input
-                class="count-value"
-                type="number"
-                v-model.number="cartList[index].count"
-                @blur="handleItemBlur(index)"
-              />
-              <button class="count-btn" @click="plusCount(index)">+</button>
-            </view>
-
-            <!-- 普通模式：当前商品显示 × 数量，点击切换为编辑模式 -->
-            <view class="goods-count" v-else @click.stop="handleItemSwitchEdit(index)">
-              <text class="count-value">×{{ item.count }}</text>
+        <view class="goods-item" v-for="(item, index) in cartList" :key="item.id || index">
+          <view class="goods-check">
+            <text
+              @tap="onChangeSelected(item)"
+              class="checkbox"
+              :class="{ checked: item.selected }"
+            ></text>
+          </view>
+          <view class="goods-img">
+            <image :src="item.picture" mode="aspectFit"></image>
+          </view>
+          <view class="goods-info">
+            <text class="goods-name">{{ item.name }}</text>
+            <text class="goods-spec">{{ item.attrsText }}</text>
+            <text class="goods-tag">同店每200减15 | 库存紧张</text>
+            <view class="price-group">
+              <text class="original-price">¥{{ item.nowOriginalPrice }}</text>
+              <text class="coupon-price">¥{{ item.nowPrice }} 券后价</text>
             </view>
           </view>
-        </checkbox-group>
+          <!-- 编辑模式：当前商品显示 ± 按钮 -->
+          <view class="goods-count" v-if="item.isItemEdit" @click.stop>
+            <button
+              class="count-btn"
+              @click="minusCount(index)"
+              :disabled="cartList[index].count <= 1"
+            >
+              -
+            </button>
+            <input
+              class="count-value"
+              type="number"
+              v-model.number="cartList[index].count"
+              @blur="handleItemBlur(index)"
+            />
+            <button class="count-btn" @click="plusCount(index)">+</button>
+          </view>
+
+          <!-- 普通模式：当前商品显示 × 数量，点击切换为编辑模式 -->
+          <view class="goods-count" v-else @click.stop="handleItemSwitchEdit(index)">
+            <text class="count-value">×{{ item.count }}</text>
+          </view>
+        </view>
       </view>
     </view>
     <!-- 底部结算栏 -->
@@ -82,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { deleteMemberCartAPI, getMemberCartAPI } from '@/api/cart'
+import { deleteMemberCartAPI, getMemberCartAPI, putMemberCartBySkuIdAPI } from '@/api/cart'
 import { useMemberStore } from '@/stores'
 import type { CartItem } from '@/types/cart'
 import { onLoad, onShow } from '@dcloudio/uni-app'
@@ -96,6 +98,14 @@ const cartList = ref<
     isItemEdit: boolean // 核心：单个商品的独立编辑状态
   })[]
 >([])
+
+// 修改选中状态-单品修改
+const onChangeSelected = (item: CartItem) => {
+  // 前端数据更新-是否选中取反
+  item.selected = !item.selected
+  // 后端数据更新
+  putMemberCartBySkuIdAPI(item.skuId, { selected: item.selected })
+}
 
 // 合计价格计算（仅选中商品）
 const totalPrice = computed(() => {
@@ -113,17 +123,6 @@ const totalPrice = computed(() => {
 const handleItemSwitchEdit = (index: number) => {
   // 仅切换当前索引商品的编辑状态，其他商品保持不变
   cartList.value[index].isItemEdit = true
-}
-
-const handleCartCheckChange = (e: any) => {
-  const selectedGoodsIds = e.detail.value as string[]
-  console.log('e', e)
-  cartList.value = cartList.value.map((item) => ({
-    ...item,
-    selected: selectedGoodsIds.includes(item.id.toString()),
-  }))
-  selectedAll.value =
-    cartList.value.length > 0 ? selectedGoodsIds.length === cartList.value.length : false
 }
 
 const handleItemBlur = (index: number) => {
@@ -221,7 +220,8 @@ const handleSettle = () => {
     uni.showToast({ title: '请选择要结算的商品', icon: 'none' })
     return
   }
-  uni.showToast({ title: `即将结算，合计¥${totalPrice.value}`, icon: 'none' })
+  // 跳转到结算页
+  uni.navigateTo({ url: '/pagesOrder/create/create' })
 }
 
 // 获取购物车列表（初始化每个商品的独立编辑状态为 false：默认普通模式）
@@ -322,6 +322,26 @@ onShow(() => {
           display: flex;
           align-items: center;
           justify-content: center;
+
+          .checkbox {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80rpx;
+            height: 100%;
+
+            &::before {
+              content: '\e6cd';
+              font-family: 'erabbit' !important;
+              font-size: 40rpx;
+              color: #444;
+            }
+
+            &.checked::before {
+              content: '\e6cc';
+              color: #27ba9b;
+            }
+          }
         }
 
         .goods-img {
@@ -431,7 +451,7 @@ onShow(() => {
 
   .cart-footer {
     position: fixed;
-    bottom: 0rpx;
+    bottom: 89rpx;
     left: 0;
     right: 0;
     display: flex;
