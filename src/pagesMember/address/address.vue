@@ -1,6 +1,11 @@
 <template>
   <view class="address-page">
-    <view class="address-item" v-for="item in addressList" :key="item.id">
+    <view
+      class="address-item"
+      v-for="item in addressList"
+      :key="item.id"
+      @click="handleSelect(item)"
+    >
       <view class="home-info">
         {{ item.fullLocation }}
         <text class="default-tag" v-if="item.isDefault == 1">默认</text>
@@ -15,6 +20,7 @@
 
 <script lang="ts" setup>
 import { getAddressListAPI } from '@/api/address'
+import { useAddressStore } from '@/stores/modules/address'
 import type { AddressItem } from '@/types/address'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
@@ -23,9 +29,15 @@ const addressList = ref<AddressItem[]>([])
 
 const getAddressList = async () => {
   const res = await getAddressListAPI()
-  addressList.value = res.result
+  addressList.value = res.result as AddressItem[]
 }
 
+const addressStore = useAddressStore()
+const handleSelect = (item: AddressItem) => {
+  addressStore.changeSelectedAddress(item)
+  console.log(item)
+  uni.navigateBack({ delta: 1 })
+}
 onLoad(() => {
   getAddressList()
 })

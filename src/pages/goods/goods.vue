@@ -195,9 +195,13 @@ const selectArrText = computed(() => {
 })
 // 加入购物车事件
 const onAddCart = async (ev: SkuPopupEvent) => {
-  await postMemberCartAPI({ skuId: ev._id, count: ev.buy_num })
-  uni.showToast({ title: '添加成功' })
-  isShowSku.value = false
+  try {
+    await postMemberCartAPI({ skuId: ev._id, count: ev.buy_num })
+    uni.showToast({ title: '添加成功' })
+    isShowSku.value = false
+  } catch (error) {
+    console.log(error)
+  }
 }
 // 立即购买
 const onBuyNow = (ev: SkuPopupEvent) => {
