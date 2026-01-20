@@ -101,7 +101,7 @@
         <text class="icon-handset"></text>客服
       </button>
       <!-- #endif -->
-      <navigator class="icons-button" url="/pages/cart/cart2" open-type="navigate">
+      <navigator class="icons-button" url="/pages/cart/cart" open-type="switchTab">
         <text class="icon-cart"></text>购物车
       </navigator>
     </view>

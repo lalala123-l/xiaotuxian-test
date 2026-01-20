@@ -99,8 +99,25 @@ import { computed, ref } from 'vue'
 import type { OrderPreResult } from '@/types/order'
 import { useAddressStore } from '@/stores/modules/address'
 import type { AddressItem } from '@/types/address'
-
-const onOrderSubmit = () => {}
+import Goods from '@/pages/goods/goods.vue'
+// 订单备注
+const buyerMessage = ref('')
+// 当前配送时间
+const activeDelivery = computed(() => deliveryList.value[activeIndex.value])
+// 提交订单
+const onOrderSubmit = async () => {
+  // 发送请求
+  const res = await postMemberOrderAPI({
+    addressId: selecteAddress.value?.id,
+    buyerMessage: buyerMessage.value,
+    deliveryTimeType: 1,
+    goods: orderPre.value!.goods.map((v) => ({ count: v.count, skuId: v.skuId })),
+    payChannel: 2,
+    payType: 1,
+  })
+  // 关闭当前页面，跳转到订单详情，传递订单id
+  uni.redirectTo({ url: `/pagesOrder/detail/detail?id=${res.result.id}` })
+}
 
 //当前配送列表
 const deliveryList = ref([
@@ -110,6 +127,7 @@ const deliveryList = ref([
 ])
 const activeIndex = ref()
 const onChangeDelivery: UniHelper.SelectorPickerOnChange = (ev) => {
+  s
   activeIndex.value = ev.detail.value
 }
 // 页面参数
@@ -142,7 +160,6 @@ const getMemberOrderPreData = async () => {
     orderPre.value = res.result
   }
 }
-
 onLoad(() => {
   getMemberOrderPreData()
 })

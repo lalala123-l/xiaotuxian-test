@@ -1,11 +1,11 @@
-import type { OrderListResult } from '@/types/order'
+import type { OrderListResult } from '@/api/order'
 import type {
   OrderCreateParams,
   OrderListParams,
   OrderLogisticResult,
   OrderPreResult,
   OrderResult,
-} from '@/types/order'
+} from '@/api/order'
 import { http } from '@/utils/http'
 /**
  * 填写订单-获取预付订单
