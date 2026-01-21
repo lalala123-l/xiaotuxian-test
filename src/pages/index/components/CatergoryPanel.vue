@@ -16,23 +16,5 @@ const props = defineProps<{
 }>()
 </script>
 <style scoped lang="scss">
-.Cp-container {
-  margin: 55rpx 55rpx 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 30rpx;
-
-  .classify-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    .icon {
-      display: inline-block;
-      width: 100rpx;
-      height: 100rpx;
-    }
-  }
-}
+@import '../style/category.scss';
 </style>

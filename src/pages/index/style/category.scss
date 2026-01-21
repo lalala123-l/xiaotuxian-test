@@ -1,26 +1,19 @@
-/* 前台类目 */
-.category {
-  margin: 20rpx 0 0;
-  padding: 10rpx 0;
+.Cp-container {
+  margin: 55rpx 55rpx 0;
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
-  min-height: 328rpx;
+  gap: 30rpx;
 
-  .category-item {
-    width: 150rpx;
+  .classify-item {
     display: flex;
-    justify-content: center;
     flex-direction: column;
     align-items: center;
-    box-sizing: border-box;
 
     .icon {
+      display: inline-block;
       width: 100rpx;
       height: 100rpx;
-    }
-    .text {
-      font-size: 26rpx;
-      color: #666;
     }
   }
 }

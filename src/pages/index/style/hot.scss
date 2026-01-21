@@ -4,7 +4,7 @@
   flex-wrap: wrap;
   margin: 20rpx 20rpx 0;
   border-radius: 10rpx;
-  background-color: #f4eeee;
+  background-color: #fff;
 
   .title {
     display: flex;
@@ -13,6 +13,10 @@
     font-size: 32rpx;
     color: #262626;
     position: relative;
+
+    .title-text {
+      min-width: 140rpx;
+    }
 
     .title-desc {
       font-size: 24rpx;
@@ -25,7 +29,6 @@
     display: flex;
     flex-direction: column;
     width: 50%;
-    height: 254rpx;
     border-right: 1rpx solid #eee;
     border-top: 1rpx solid #eee;
 
