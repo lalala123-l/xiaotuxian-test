@@ -122,8 +122,23 @@ const onOrderPay = async () => {
   } else {
     // #ifdef MP-WEIXIN
     // 正式环境微信支付
-    const res = await getPayWxPayMiniPayAPI({ orderId: query.id })
-    await wx.requestPayment(res.result)
+    try {
+      const res = await getPayWxPayMiniPayAPI({ orderId: query.id })
+      await wx.requestPayment({
+        ...res.result,
+        success: (res) => {
+          // 3. 支付成功，跳转结果页
+          uni.redirectTo({ url: `/pages/paySuccess?orderId=${query.id}` })
+          // 4. 主动查询订单状态（确保准确性）
+        },
+        fail: (err) => {
+          uni.showToast({ title: '支付失败，请重试', icon: 'none' })
+        },
+      })
+    } catch (error) {
+      uni.showToast({ title: '获取支付参数失败', icon: 'none' })
+    }
+
     // #endif
 
     // #ifdef H5 || APP-PLUS
