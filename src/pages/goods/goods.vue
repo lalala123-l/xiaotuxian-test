@@ -14,6 +14,11 @@
           <text class="split">/</text>
           <text class="total">{{ goods?.mainPictures.length }}</text>
         </view>
+        <view class="share-container">
+          <button class="share-btn" open-type="share">
+            <uni-icons color="#fff" size="24" type="redo-filled" />
+          </button>
+        </view>
       </view>
 
       <!-- 商品简介 -->
@@ -184,6 +189,19 @@ enum SkuMode {
 }
 const mode = ref<SkuMode>(SkuMode.Cart)
 
+//分享
+const onShareAppMessage = (res: any) => {
+  if (res.from === 'button') {
+    console.log(res.target)
+  }
+
+  return {
+    title: goods.value.name,
+    path: `/pages/goods/goods?id=${goods.value.id}`,
+    imageUrl: goods.value.mainPictures[0],
+    desc: `【特价】${goods.value.name}，仅需¥${goods.value.price}，限时抢购！`,
+  }
+}
 const openSkuPopup = (val: SkuMode) => {
   isShowSku.value = true
   mode.value = val
@@ -348,6 +366,30 @@ page {
 
       .total {
         font-size: 24rpx;
+      }
+    }
+
+    .share-container {
+      position: absolute;
+      top: 30rpx;
+      right: 30rpx;
+      z-index: 10;
+    }
+
+    .share-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(0, 0, 0, 0.5);
+      height: 80rpx;
+      width: 80rpx;
+      border-radius: 40rpx;
+      padding: 0;
+      margin: 0;
+      border: none;
+
+      &:after {
+        border: none;
       }
     }
   }
