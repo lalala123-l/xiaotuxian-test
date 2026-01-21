@@ -451,7 +451,7 @@ onShow(() => {
 
   .cart-footer {
     position: fixed;
-    bottom: 3rpx;
+    bottom: var(--window-bottom);
     left: 0;
     right: 0;
     display: flex;
